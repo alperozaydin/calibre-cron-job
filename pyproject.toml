@@ -1,0 +1,22 @@
+[project]
+name = "calibre-cron-job"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "ALper Ozaydin"}
+]
+readme = "README.md"
+requires-python = ">=3.8,<4.0"
+dependencies = [
+    "aws-cdk-lib (>=2.176.0,<3.0.0)",
+    "aws-lambda-powertools (>=3.4.1,<4.0.0)",
+    "python-dotenv (>=1.0.1,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
