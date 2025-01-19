@@ -1,6 +1,8 @@
 # Calibre Cron Job
 
-This document provides a step-by-step guide on how to set up and use the project. It covers environment setup, dependencies, Docker usage, and other relevant instructions.
+Calibre Cron Job runs built-in Calibre recipe to download the epub book and send it to the Kindle. It uses AWS Fargate 
+to run the container via Eventrbidge rules. The project has the main script that downloads the epub and sends an email
+and also cdk code for AWS.
 
 ---
 
