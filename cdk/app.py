@@ -16,7 +16,14 @@ class FargateCronJobStack(Stack):
 
         vpc = aws_ec2.Vpc(self, "FargateVpc",
             max_azs=2,
-            nat_gateways=1
+            nat_gateways=0,
+            subnet_configuration=[
+                aws_ec2.SubnetConfiguration(
+                    name="PublicSubnet",
+                    subnet_type=aws_ec2.SubnetType.PUBLIC,
+                    cidr_mask=24
+                )
+            ]
         )
 
         cluster = aws_ecs.Cluster(self, "FargateCluster",
@@ -54,6 +61,7 @@ class FargateCronJobStack(Stack):
             cluster=cluster,
             task_definition=task_definition,
             subnet_selection=aws_ec2.SubnetSelection(subnet_type=aws_ec2.SubnetType.PUBLIC),
+            assign_public_ip=True,
             task_count=1
         )
 

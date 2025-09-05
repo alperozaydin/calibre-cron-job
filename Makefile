@@ -54,5 +54,8 @@ synth:
 deploy:
 	poetry run cdk deploy --app "python cdk/app.py"
 
+destroy:
+	poetry run cdk destroy --app "python cdk/app.py"
+
 bootstrap:
 	poetry run cdk bootstrap aws://$(AWS_ACCOUNT_ID)/$(AWS_REGION)
