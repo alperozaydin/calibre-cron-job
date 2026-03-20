@@ -48,6 +48,8 @@ SENDER_EMAIL=<your-email>
 SENDER_PASSWORD=<your-password>
 RECIPIENT_EMAIL=<recipient-email>
 AWS_ACCOUNT_ID=<your-aws-account-id>
+WEBSHARE_API_KEY=<your-webshare-api-key>
+WEBSHARE_PROXY_URL=http://<proxy_ip>:<proxy_port>
 ```
 
 > Replace placeholders with actual values. This file includes sensitive information.
@@ -112,7 +114,8 @@ make deploy
 - Assumes that there is already ECR Repo named `calibre-cron-job`
 - Ensure the `.env` file is not committed to version control. Add it to `.gitignore` or encrypt it
 - Use `git-crypt` to encrypt sensitive files if working in a collaborative environment.
-- Feel free to change recipe with any other built-in recipe in Calibre 
+- Feel free to change recipe with any other built-in or custom recipe in Calibre 
+- The Economist WAF aggressively blocks known datacenter IPs, including AWS Fargate. To resolve this, this project requires a [Webshare](https://www.webshare.io/) shared proxy (though any other commercial proxy could be adapted). The container will automatically use `WEBSHARE_API_KEY` to temporarily authorize its ephemeral IP before running Calibre through the `WEBSHARE_PROXY_URL` you specify.
 
 ---
 

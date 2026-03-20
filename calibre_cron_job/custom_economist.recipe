@@ -26,15 +26,11 @@ class CustomEconomist(Economist):
                 fcx_access_token = cookie_data.get('fcx_access_token')
                 cf_clearance = cookie_data.get('cf_clearance')
                 playwright_ua = cookie_data.get('user_agent')
-                print(f"Recipe loaded fresh cookies from {cookie_file}")
-                print(f"fcx_access_token={fcx_access_token}")
-                print(f"cf_clearance={cf_clearance}")
         except Exception as e:
             print(f"Failed to load fresh cookies from {cookie_file}: {e}")
             print("WARNING: Downloads will likely fail without fresh tokens!")
 
         self.last_used_ua = kwargs['user_agent'] = playwright_ua
-
 
         br = BasicNewsRecipe.get_browser(self, *args, **kwargs)
 
