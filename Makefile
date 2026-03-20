@@ -12,7 +12,7 @@ init:
 
 install: init
 	poetry install
-	poetry export -f requirements.txt --output requirements.txt --without-hashes
+	poetry export -f requirements.txt > requirements.txt --without-hashes
 
 lock:
 	poetry lock

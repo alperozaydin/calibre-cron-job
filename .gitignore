@@ -3,3 +3,6 @@
 cdk.out
 
 requirements.txt
+.idea/*
+*.pyc
+.DS_Store

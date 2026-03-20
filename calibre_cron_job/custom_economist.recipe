@@ -1,0 +1,54 @@
+import urllib.request
+import sys
+import json
+import os
+from calibre.web.feeds.news import BasicNewsRecipe
+
+
+url = "https://raw.githubusercontent.com/kovidgoyal/calibre/58e35caa4af66aa3bc0ea8506173c290ba708728/recipes/economist_free.recipe"
+urllib.request.urlretrieve(url, "/tmp/economist_free.py")
+
+sys.path.append("/tmp")
+from economist_free import Economist
+
+
+class CustomEconomist(Economist):
+    def get_browser(self, *args, **kwargs):
+        
+        cookie_file = '/tmp/economist_cookies.json'
+        fcx_access_token = None
+        cf_clearance = None
+        playwright_ua = None
+
+        try:
+            with open(cookie_file, 'r') as f:
+                cookie_data = json.load(f)
+                fcx_access_token = cookie_data.get('fcx_access_token')
+                cf_clearance = cookie_data.get('cf_clearance')
+                playwright_ua = cookie_data.get('user_agent')
+                print(f"Recipe loaded fresh cookies from {cookie_file}")
+                print(f"fcx_access_token={fcx_access_token}")
+                print(f"cf_clearance={cf_clearance}")
+        except Exception as e:
+            print(f"Failed to load fresh cookies from {cookie_file}: {e}")
+            print("WARNING: Downloads will likely fail without fresh tokens!")
+
+        self.last_used_ua = kwargs['user_agent'] = playwright_ua
+
+
+        br = BasicNewsRecipe.get_browser(self, *args, **kwargs)
+
+        self.fcx_access_token = fcx_access_token
+
+        cookies = {
+            'fcx_access_token': fcx_access_token,
+            'economist_auth_complete': 'true',
+            'cf_clearance': cf_clearance
+        }
+
+        for name, value in cookies.items():
+            if value:
+                br.set_cookie(name, str(value), domain='.economist.com')
+        br.addheaders = [('User-Agent', self.last_used_ua)]
+
+        return br
