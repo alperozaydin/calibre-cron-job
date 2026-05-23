@@ -26,6 +26,14 @@ class FargateCronJobStack(Stack):
             ]
         )
 
+        # Explicit security group with all outbound traffic allowed
+        # (required for proxy ports like 5863, 6462, etc.)
+        security_group = aws_ec2.SecurityGroup(self, "FargateTaskSG",
+            vpc=vpc,
+            description="Security group for Calibre Fargate task",
+            allow_all_outbound=True
+        )
+
         cluster = aws_ecs.Cluster(self, "FargateCluster",
             vpc=vpc
         )
@@ -37,8 +45,8 @@ class FargateCronJobStack(Stack):
         )
 
         task_definition = aws_ecs.FargateTaskDefinition(self, "CalibreTask",
-            cpu=256,
-            memory_limit_mib=512,
+            cpu=1024,
+            memory_limit_mib=2048,
             runtime_platform=aws_ecs.RuntimePlatform(
                 operating_system_family=aws_ecs.OperatingSystemFamily.LINUX,
                 cpu_architecture=aws_ecs.CpuArchitecture.ARM64
@@ -61,6 +69,7 @@ class FargateCronJobStack(Stack):
             cluster=cluster,
             task_definition=task_definition,
             subnet_selection=aws_ec2.SubnetSelection(subnet_type=aws_ec2.SubnetType.PUBLIC),
+            security_groups=[security_group],
             assign_public_ip=True,
             task_count=1
         )
